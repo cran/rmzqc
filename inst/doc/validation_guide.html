@@ -13,7 +13,7 @@
 
 <meta name="date" content="2023-04-11" />
 
-<title>Basic R-Usage Guide for rMZQC</title>
+<title>Validation of mzQC documents</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -356,55 +356,44 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">Basic R-Usage Guide for rMZQC</h1>
+<h1 class="title toc-ignore">Validation of mzQC documents</h1>
 <h4 class="author">Chris Bielow <a href="mailto:chris.bielow@fu-berlin.de" class="email">chris.bielow@fu-berlin.de</a></h4>
 <h4 class="date">2023-04-11</h4>
 
 </div>
 
 
-<div id="basic-r-usage-guide-for-rmzqc" class="section level1">
-<h1>Basic R-Usage Guide for rMZQC</h1>
-<p>This vignette serves as a quickstart guide for R users to create and
-save an mzQC document.</p>
-<p><strong>Target Audience:</strong> R users</p>
-<div id="create-a-minial-mzqc-document" class="section level2">
-<h2>Create a minial mzQC document</h2>
+<div id="how-to-syntactically-validate-an-mzqc-file" class="section level1">
+<h1>How to syntactically validate an mzQC file</h1>
+<p>The mzQC file format is based upon JSON. When writing a JSON file,
+certain substructures are required by the mzQC specification document,
+other items are optional. The syntax validator build into
+<code>rmzqc</code> allows you to check if all mandatory items are
+present, or if something was erroneously omitted in the mzQC file.</p>
+<p>There are three validation functions validateFromFile(),
+validateFromString() and validateFromObj(), depending on the data you
+have at hand. Their result is always a bool (TRUE/FALSE) which has some
+attributes (usually ‘errors’) attached. Simply print the bool or call
+‘attributes()’ on the result (in case of failure) to inspect
+details.</p>
+<p>To validate a file simply:</p>
 <pre class="r"><code>library(rmzqc)
-raw_file = &quot;file:///c:/data/special.raw&quot;  ## we need a proper URI (i.e. no backslashes and a scheme, e.g. &#39;file:&#39;) 
-                                          ## otherwise writing will fail
-file_format = getCVTemplate(accession = filenameToCV(raw_file))
-ptxqc_software = toAnalysisSoftware(id = &quot;MS:1003162&quot;, version = &quot;1.0.13&quot;)
-run1_qc = MzQCrunQuality$new(metadata = MzQCmetadata$new(label = raw_file,
-                                                        inputFiles = 
-                                                          list(MzQCinputFile$new(basename(raw_file),
-                                                                                 raw_file,
-                                                                                 file_format)),
-                                                     analysisSoftware = list(ptxqc_software)),
-                         qualityMetrics = list(toQCMetric(id = &quot;MS:4000059&quot;, value = 13405) ## number of MS1 scans
-                                               )
-                         )
-
-mzQC_document = MzQCmzQC$new(version = &quot;1.0.0&quot;, 
-                             creationDate = MzQCDateTime$new(), 
-                             contactName = Sys.info()[&quot;user&quot;], 
-                             contactAddress = &quot;test@user.info&quot;, 
-                             description = &quot;A minimal mzQC test document with bogus data&quot;,
-                             runQualities = list(run1_qc),
-                             setQualities = list(), 
-                             controlledVocabularies = list(getDefaultCV()))
-
-## write it out
-mzqc_filename = paste0(getwd(), &quot;/test.mzQC&quot;)
-writeMZQC(mzqc_filename, mzQC_document)
-cat(mzqc_filename, &quot;written to disk!&quot;)
-
-## read it again
-mq = readMZQC(mzqc_filename)
-
-## print some basic stats
-gettextf(&quot;This mzQC was created on %s and has %d quality metric(s) in total.&quot;, dQuote(mq$creationDate$datetime), length(mq$runQualities) + length(mq$setQualities))</code></pre>
-</div>
+mzQC_filename = system.file(&quot;testdata/test.mzQC&quot;, package=&quot;rmzqc&quot;)
+#mzQC_filename = &quot;C:\\dev\\rmzqc\\inst\\testdata\\test.mzQC&quot;
+res = validateFromFile(mzQC_filename)
+res</code></pre>
+<p>If you have the file already as a JSON string in R (i.e. no need to
+load the data from a file), then simply use ‘validateFromString()’</p>
+<pre class="r"><code>library(rmzqc)
+mzQC_strings = readLines(system.file(&quot;testdata/test.mzQC&quot;, package=&quot;rmzqc&quot;))
+res = validateFromString(mzQC_strings)
+res</code></pre>
+<p>Finally, if you have an mzQC root object in hand, then call
+‘validateFromObj()’</p>
+<pre class="r"><code>library(rmzqc)
+mzQC_root = rmzqc::readMZQC(system.file(&quot;testdata/test.mzQC&quot;, package=&quot;rmzqc&quot;))
+res = validateFromObj(mzQC_root)
+res</code></pre>
 </div>
 
 
