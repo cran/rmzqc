@@ -1,12 +1,12 @@
-621b1b7d3d43280cb95f323d9356f6e7 *DESCRIPTION
+c52dc062067768796b716fe0177cab36 *DESCRIPTION
 7e53d0bff7b28bc4147815207b1a4f93 *LICENSE
 27b156908a4450465405270bc9534ce0 *NAMESPACE
-1ea9bbd1da02d78ac594b7155b343a06 *NEWS.md
+84688601bd6f80dcf9e4df38cad62625 *NEWS.md
 0c805ffb5aff57706033b8f7faec181f *R/conversion.R
-e13b2ca99fe2b6f15011aa938690df9d *R/io.R
+12e6fc40389248fe9798136a7f71ddd3 *R/io.R
 3d33cf89cf720d87fe5fc6aafd25e45b *R/misc.R
 5097d975e0ddfe02cb00a81e4bf1b179 *R/mzQC.R
-e9ec68ee26b9c733037a89c7b8e45a50 *R/obo.R
+52fd67e6c6c07b1ebe6d9a76c36f5672 *R/obo.R
 fd095af9bec2b6167e2cb170c380a780 *R/rmzqc.R
 13d4bfb0e716622325b9d355767ac61b *R/templates.R
 7ca77b32899a95b36203869bbc6aa3cb *R/validator.R
@@ -17,10 +17,10 @@ fe59cac36b499685856084cd141ed25f *build/vignette.rds
 1f6e1b5122ea4c2d3797bae72f140ab1 *inst/cv/uo.obo
 9fab705e5c53cd027e29138b2d4a8942 *inst/doc/basic_guide.R
 a992234479c6fbcbf482d666c573df99 *inst/doc/basic_guide.Rmd
-28bbb987d97edfc8e62dc01494aced35 *inst/doc/basic_guide.html
+5ff52c1e7ddfdd7cadf815e78982031b *inst/doc/basic_guide.html
 4cc0fe9b4ca658a63811878f01c69879 *inst/doc/validation_guide.R
 ce6d98361c53a0e98e4b904a7b911c74 *inst/doc/validation_guide.Rmd
-b8f768278a1656aceed666bd24d724e5 *inst/doc/validation_guide.html
+b71929c1c7d1d44b0b0be80e13348735 *inst/doc/validation_guide.html
 34868737d43c34c56c241428bec6927a *inst/schema/mzqc_schema.json
 956b069c3a6034cfcdb6836ab2c7898a *inst/testdata/test.mzQC
 79d76afa2b8f43ac53bd4d7f71cf0e81 *man/CV_.Rd
@@ -52,7 +52,7 @@ b4c6df7ed1bbd9f864cec3becfc80dcb *man/getDefaultCV.Rd
 a839ac31dd3f2d5826e8c453ef008416 *man/isUndefined.Rd
 b8edd639766308cdc88972928526df32 *man/isValidMzQC.Rd
 9573a38e8752dafa8dbe20788b80c7bb *man/parseOBO.Rd
-60cf60d8b7ed9da978a0bb7d7f796a61 *man/readMZQC.Rd
+e81e607470919a884d8a1fd1adbd6c5a *man/readMZQC.Rd
 3939d240d9d6025075215a78871436f0 *man/removeFileSuffix.Rd
 a9762e93d76ced021537576b8fc1c822 *man/rmzqc.Rd
 df4d18d1253a3e340efdda093dbc8aab *man/toAnalysisSoftware.Rd
@@ -60,7 +60,7 @@ df4d18d1253a3e340efdda093dbc8aab *man/toAnalysisSoftware.Rd
 eaa1a069dd5f09fbed94506eaab9bc4b *man/validateFromFile.Rd
 dd8335fa94567ebb3a39aeac10dd514d *man/validateFromObj.Rd
 dd46c73c6c3a127b839c45e0742e5ab2 *man/validateFromString.Rd
-ae8cda08d54d5f71bbd718bf5f93e1b3 *man/writeMZQC.Rd
+a0403b25f72d1b5de238ada177a19f1f *man/writeMZQC.Rd
 2d60fbeb98928b97c7cb0b3a5b897e8c *tests/testthat.R
 ec37c71cb726b4509f2b32225139584e *tests/testthat/test-mzQC.R
 2ffb0f65c252d8f0995bb13366dd891e *tests/testthat/test_conversion.R
