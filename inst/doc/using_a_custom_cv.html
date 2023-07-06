@@ -13,7 +13,7 @@
 
 <meta name="date" content="2023-07-05" />
 
-<title>Basic R-Usage Guide for rMZQC</title>
+<title>Using a custom controlled vocabulary for rMZQC</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -356,55 +356,105 @@ pre code {
 
 
 
-<h1 class="title toc-ignore">Basic R-Usage Guide for rMZQC</h1>
+<h1 class="title toc-ignore">Using a custom controlled vocabulary for
+rMZQC</h1>
 <h4 class="author">Chris Bielow <a href="mailto:chris.bielow@fu-berlin.de" class="email">chris.bielow@fu-berlin.de</a></h4>
 <h4 class="date">2023-07-05</h4>
 
 </div>
 
 
-<div id="basic-r-usage-guide-for-rmzqc" class="section level1">
-<h1>Basic R-Usage Guide for rMZQC</h1>
-<p>This vignette serves as a quickstart guide for R users to create and
-save an mzQC document.</p>
+<div id="using-a-custom-controlled-vocabulary-for-rmzqc" class="section level1">
+<h1>Using a custom controlled vocabulary for rMZQC</h1>
+<p>This vignette serves as a guide for R users to use a custom CV before
+creating an mzQC document.</p>
+<p>Warning: you should settle on a CV before instantiating any mzQC
+objects, since this ensures that all CV terms are consistent (and
+checked for existance) and that the CV meta information within the mzQC
+document is accurate.</p>
 <p><strong>Target Audience:</strong> R users</p>
-<div id="create-a-minial-mzqc-document" class="section level2">
-<h2>Create a minial mzQC document</h2>
+<div id="create-a-minial-mzqc-document-with-a-custom-cv" class="section level2">
+<h2>Create a minial mzQC document with a custom CV</h2>
+<p>Let’s first consider what happens by default:</p>
 <pre class="r"><code>library(rmzqc)
-raw_file = &quot;file:///c:/data/special.raw&quot;  ## we need a proper URI (i.e. no backslashes and a scheme, e.g. &#39;file:&#39;) 
-                                          ## otherwise writing will fail
-file_format = getCVTemplate(accession = filenameToCV(raw_file))
-ptxqc_software = toAnalysisSoftware(id = &quot;MS:1003162&quot;, version = &quot;1.0.13&quot;)
-run1_qc = MzQCrunQuality$new(metadata = MzQCmetadata$new(label = raw_file,
-                                                        inputFiles = 
-                                                          list(MzQCinputFile$new(basename(raw_file),
-                                                                                 raw_file,
-                                                                                 file_format)),
-                                                     analysisSoftware = list(ptxqc_software)),
-                         qualityMetrics = list(toQCMetric(id = &quot;MS:4000059&quot;, value = 13405) ## number of MS1 scans
-                                               )
-                         )
 
-mzQC_document = MzQCmzQC$new(version = &quot;1.0.0&quot;, 
-                             creationDate = MzQCDateTime$new(), 
-                             contactName = Sys.info()[&quot;user&quot;], 
-                             contactAddress = &quot;test@user.info&quot;, 
-                             description = &quot;A minimal mzQC test document with bogus data&quot;,
-                             runQualities = list(run1_qc),
-                             setQualities = list(), 
-                             controlledVocabularies = list(getCVInfo()))
-
-## write it out
-mzqc_filename = paste0(getwd(), &quot;/test.mzQC&quot;)
-writeMZQC(mzqc_filename, mzQC_document)
-cat(mzqc_filename, &quot;written to disk!\n&quot;)</code></pre>
-<pre><code>## C:/Users/bielow/AppData/Local/Temp/Rtmpqk9PA5/Rbuild3de826d02a58/rmzqc/vignettes/test.mzQC written to disk!</code></pre>
-<pre class="r"><code>## read it again
-mq = readMZQC(mzqc_filename)
-
-## print some basic stats
-gettextf(&quot;This mzQC was created on %s and has %d quality metric(s) in total.&quot;, dQuote(mq$creationDate$datetime), length(mq$runQualities) + length(mq$setQualities))</code></pre>
-<pre><code>## [1] &quot;This mzQC was created on \&quot;2023-07-05T00:00:00\&quot; and has 1 quality metric(s) in total.&quot;</code></pre>
+print(getCVInfo())</code></pre>
+<pre><code>## Reference class object of class &quot;MzQCcontrolledVocabulary&quot;
+## Field &quot;name&quot;:
+## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
+## Field &quot;uri&quot;:
+## [1] &quot;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.129/psi-ms.obo&quot;
+## Field &quot;version&quot;:
+## [1] &quot;4.1.129&quot;</code></pre>
+<pre class="r"><code>## test if the default CV is usable
+toQCMetric(id = &quot;MS:4000059&quot;, value = 13405) ## number of MS1 scans</code></pre>
+<pre><code>## Reference class object of class &quot;MzQCqualityMetric&quot;
+## Field &quot;accession&quot;:
+## [1] &quot;MS:4000059&quot;
+## Field &quot;name&quot;:
+## [1] &quot;number of MS1 spectra&quot;
+## Field &quot;description&quot;:
+## [1] &quot;\&quot;The number of MS1 events in the run.\&quot; [PSI:MS]&quot;
+## Field &quot;value&quot;:
+## [1] 13405
+## Field &quot;unit&quot;:
+## list()</code></pre>
+<p>However, if you happen to run this code without an internet
+connection, it will fall back to the PSI-MS CV which is shipped with the
+rmzqc package (which may not contain the latest CV terms)</p>
+<pre class="r"><code>## With internet:
+CV = getCVSingleton()
+CV$setData(getCVDictionary(&quot;latest&quot;)) ## this is done internally by default when you load the package</code></pre>
+<pre><code>## Downloading obo from &#39;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.129/psi-ms.obo&#39; ...</code></pre>
+<pre class="r"><code>cat(&quot;Number of entries in latest CV: &quot;, nrow(getCVSingleton()$getCV()), &quot;\n&quot;)</code></pre>
+<pre><code>## Number of entries in latest CV:  6700</code></pre>
+<pre class="r"><code>print(getCVInfo())</code></pre>
+<pre><code>## Reference class object of class &quot;MzQCcontrolledVocabulary&quot;
+## Field &quot;name&quot;:
+## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
+## Field &quot;uri&quot;:
+## [1] &quot;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.129/psi-ms.obo&quot;
+## Field &quot;version&quot;:
+## [1] &quot;4.1.129&quot;</code></pre>
+<pre class="r"><code>## simulate missing internet connection by invoking the function manually
+CV$setData(getCVDictionary(&quot;local&quot;))
+cat(&quot;Number of entries in local CV: &quot;, nrow(getCVSingleton()$getCV()), &quot;\n&quot;)</code></pre>
+<pre><code>## Number of entries in local CV:  6508</code></pre>
+<pre class="r"><code>print(getCVInfo())</code></pre>
+<pre><code>## Reference class object of class &quot;MzQCcontrolledVocabulary&quot;
+## Field &quot;name&quot;:
+## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
+## Field &quot;uri&quot;:
+## [1] &quot;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.95/psi-ms.obo&quot;
+## Field &quot;version&quot;:
+## [1] &quot;4.1.95&quot;</code></pre>
+<p>Now, the package’s PSI-MS CV might still not suit you, and you want
+to use the latest unpublished CV, which you downloaded somewhere, or
+which you handcrafted for testing. Then simply use a custom .obo
+file:</p>
+<pre class="r"><code>myOBO = system.file(&quot;./cv/psi-ms.obo&quot;, package=&quot;rmzqc&quot;) ## we will use a local file, but you can point to anything you have (even URI&#39;s)
+CV$setData(getCVDictionary(&quot;custom&quot;, myOBO))
+cat(&quot;Number of entries in custom CV: &quot;, nrow(getCVSingleton()$getCV()), &quot;\n&quot;)</code></pre>
+<pre><code>## Number of entries in custom CV:  6508</code></pre>
+<pre class="r"><code>print(getCVInfo())</code></pre>
+<pre><code>## Reference class object of class &quot;MzQCcontrolledVocabulary&quot;
+## Field &quot;name&quot;:
+## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
+## Field &quot;uri&quot;:
+## [1] &quot;C:/Users/bielow/AppData/Local/Temp/Rtmpqk9PA5/Rinst3de82901451f/rmzqc/./cv/psi-ms.obo&quot;
+## Field &quot;version&quot;:
+## [1] &quot;4.1.95&quot;</code></pre>
+<pre class="r"><code>## you may want to change the URI (and version?) manually, before creating an mzQC file:
+CV$data$URI = &quot;https://myURI.com&quot;
+CV$data$version = &quot;9.9.2&quot;
+print(getCVInfo())</code></pre>
+<pre><code>## Reference class object of class &quot;MzQCcontrolledVocabulary&quot;
+## Field &quot;name&quot;:
+## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
+## Field &quot;uri&quot;:
+## [1] &quot;https://myURI.com&quot;
+## Field &quot;version&quot;:
+## [1] &quot;9.9.2&quot;</code></pre>
 </div>
 </div>
 

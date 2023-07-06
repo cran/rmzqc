@@ -1,37 +1,37 @@
-## ---- eval=FALSE--------------------------------------------------------------
-#  library(rmzqc)
-#  raw_file = "file:///c:/data/special.raw"  ## we need a proper URI (i.e. no backslashes and a scheme, e.g. 'file:')
-#                                            ## otherwise writing will fail
-#  file_format = getCVTemplate(accession = filenameToCV(raw_file))
-#  ptxqc_software = toAnalysisSoftware(id = "MS:1003162", version = "1.0.13")
-#  run1_qc = MzQCrunQuality$new(metadata = MzQCmetadata$new(label = raw_file,
-#                                                          inputFiles =
-#                                                            list(MzQCinputFile$new(basename(raw_file),
-#                                                                                   raw_file,
-#                                                                                   file_format)),
-#                                                       analysisSoftware = list(ptxqc_software)),
-#                           qualityMetrics = list(toQCMetric(id = "MS:4000059", value = 13405) ## number of MS1 scans
-#                                                 )
-#                           )
-#  
-#  mzQC_document = MzQCmzQC$new(version = "1.0.0",
-#                               creationDate = MzQCDateTime$new(),
-#                               contactName = Sys.info()["user"],
-#                               contactAddress = "test@user.info",
-#                               description = "A minimal mzQC test document with bogus data",
-#                               runQualities = list(run1_qc),
-#                               setQualities = list(),
-#                               controlledVocabularies = list(getDefaultCV()))
-#  
-#  ## write it out
-#  mzqc_filename = paste0(getwd(), "/test.mzQC")
-#  writeMZQC(mzqc_filename, mzQC_document)
-#  cat(mzqc_filename, "written to disk!")
-#  
-#  ## read it again
-#  mq = readMZQC(mzqc_filename)
-#  
-#  ## print some basic stats
-#  gettextf("This mzQC was created on %s and has %d quality metric(s) in total.", dQuote(mq$creationDate$datetime), length(mq$runQualities) + length(mq$setQualities))
-#  
+## ---- eval=TRUE---------------------------------------------------------------
+library(rmzqc)
+raw_file = "file:///c:/data/special.raw"  ## we need a proper URI (i.e. no backslashes and a scheme, e.g. 'file:') 
+                                          ## otherwise writing will fail
+file_format = getCVTemplate(accession = filenameToCV(raw_file))
+ptxqc_software = toAnalysisSoftware(id = "MS:1003162", version = "1.0.13")
+run1_qc = MzQCrunQuality$new(metadata = MzQCmetadata$new(label = raw_file,
+                                                        inputFiles = 
+                                                          list(MzQCinputFile$new(basename(raw_file),
+                                                                                 raw_file,
+                                                                                 file_format)),
+                                                     analysisSoftware = list(ptxqc_software)),
+                         qualityMetrics = list(toQCMetric(id = "MS:4000059", value = 13405) ## number of MS1 scans
+                                               )
+                         )
+
+mzQC_document = MzQCmzQC$new(version = "1.0.0", 
+                             creationDate = MzQCDateTime$new(), 
+                             contactName = Sys.info()["user"], 
+                             contactAddress = "test@user.info", 
+                             description = "A minimal mzQC test document with bogus data",
+                             runQualities = list(run1_qc),
+                             setQualities = list(), 
+                             controlledVocabularies = list(getCVInfo()))
+
+## write it out
+mzqc_filename = paste0(getwd(), "/test.mzQC")
+writeMZQC(mzqc_filename, mzQC_document)
+cat(mzqc_filename, "written to disk!\n")
+
+## read it again
+mq = readMZQC(mzqc_filename)
+
+## print some basic stats
+gettextf("This mzQC was created on %s and has %d quality metric(s) in total.", dQuote(mq$creationDate$datetime), length(mq$runQualities) + length(mq$setQualities))
+
 
