@@ -1,5 +1,15 @@
 ## ---- eval=TRUE---------------------------------------------------------------
 library(rmzqc)
+data = readMZQC(system.file("./testdata/test.mzQC", package = "rmzqc", mustWork = TRUE))
+cat("This file has ", length(data$runQualities), " runqualities\n")
+cat("  - file: ", data$runQualities[[1]]$metadata$inputFiles[[1]]$name, "\n")
+cat("  - # of metrics: ", length(data$runQualities[[1]]$qualityMetrics), "\n")
+cat("    - metric #1 name: ", data$runQualities[[1]]$qualityMetrics[[1]]$name, "\n")
+cat("    - metric #1 value: ", data$runQualities[[1]]$qualityMetrics[[1]]$value, "\n")
+
+
+## ---- eval=TRUE---------------------------------------------------------------
+library(rmzqc)
 raw_file = "file:///c:/data/special.raw"  ## we need a proper URI (i.e. no backslashes and a scheme, e.g. 'file:') 
                                           ## otherwise writing will fail
 file_format = getCVTemplate(accession = filenameToCV(raw_file))
