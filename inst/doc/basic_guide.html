@@ -11,7 +11,7 @@
 
 <meta name="author" content="Chris Bielow chris.bielow@fu-berlin.de" />
 
-<meta name="date" content="2023-08-05" />
+<meta name="date" content="2023-08-25" />
 
 <title>Basic R-Usage Guide for rMZQC</title>
 
@@ -358,7 +358,7 @@ pre code {
 
 <h1 class="title toc-ignore">Basic R-Usage Guide for rMZQC</h1>
 <h4 class="author">Chris Bielow <a href="mailto:chris.bielow@fu-berlin.de" class="email">chris.bielow@fu-berlin.de</a></h4>
-<h4 class="date">2023-08-05</h4>
+<h4 class="date">2023-08-25</h4>
 
 </div>
 
@@ -396,17 +396,18 @@ depending on context. In short: <code>null</code> may become an
 <div id="create-a-minial-mzqc-document" class="section level2">
 <h2>Create a minial mzQC document</h2>
 <pre class="r"><code>library(rmzqc)
-raw_file = &quot;file:///c:/data/special.raw&quot;  ## we need a proper URI (i.e. no backslashes and a scheme, e.g. &#39;file:&#39;) 
-                                          ## otherwise writing will fail
+## we need a proper URI (i.e. no backslashes and a scheme, e.g. &#39;file:&#39;)
+## otherwise writing will fail
+raw_file = localFileToURI(&quot;c:\\data\\special.raw&quot;, FALSE)
+
 file_format = getCVTemplate(accession = filenameToCV(raw_file))</code></pre>
 <pre><code>## Downloading obo from &#39;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.130/psi-ms.obo&#39; ...</code></pre>
-<pre class="r"><code>ptxqc_software = toAnalysisSoftware(id = &quot;MS:1003162&quot;, version = &quot;1.0.13&quot;)
+<pre class="r"><code>ptxqc_software = toAnalysisSoftware(id = &quot;MS:1003162&quot;, version = &quot;1.0.13&quot;) ## you could use &#39;version = packageVersion(&quot;PTXQC&quot;)&#39; to automate further
 run1_qc = MzQCrunQuality$new(metadata = MzQCmetadata$new(label = raw_file,
-                                                        inputFiles = 
-                                                          list(MzQCinputFile$new(basename(raw_file),
-                                                                                 raw_file,
-                                                                                 file_format)),
-                                                     analysisSoftware = list(ptxqc_software)),
+                         inputFiles = list(MzQCinputFile$new(basename(raw_file),
+                                                             raw_file,
+                                                            file_format)),
+                         analysisSoftware = list(ptxqc_software)),
                          qualityMetrics = list(toQCMetric(id = &quot;MS:4000059&quot;, value = 13405) ## number of MS1 scans
                                                )
                          )
@@ -424,13 +425,13 @@ mzQC_document = MzQCmzQC$new(version = &quot;1.0.0&quot;,
 mzqc_filename = paste0(getwd(), &quot;/test.mzQC&quot;)
 writeMZQC(mzqc_filename, mzQC_document)
 cat(mzqc_filename, &quot;written to disk!\n&quot;)</code></pre>
-<pre><code>## C:/Users/bielow/AppData/Local/Temp/RtmpYZTMzS/Rbuild332058b6932/rmzqc/vignettes/test.mzQC written to disk!</code></pre>
+<pre><code>## C:/Users/bielow/AppData/Local/Temp/Rtmp2LssWv/Rbuild53046c2e91c/rmzqc/vignettes/test.mzQC written to disk!</code></pre>
 <pre class="r"><code>## read it again
 mq = readMZQC(mzqc_filename)
 
 ## print some basic stats
 gettextf(&quot;This mzQC was created on %s and has %d quality metric(s) in total.&quot;, dQuote(mq$creationDate$datetime), length(mq$runQualities) + length(mq$setQualities))</code></pre>
-<pre><code>## [1] &quot;This mzQC was created on \&quot;2023-08-05T00:00:00\&quot; and has 1 quality metric(s) in total.&quot;</code></pre>
+<pre><code>## [1] &quot;This mzQC was created on \&quot;2023-08-25T00:00:00\&quot; and has 1 quality metric(s) in total.&quot;</code></pre>
 </div>
 </div>
 

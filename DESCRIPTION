@@ -1,7 +1,7 @@
 Package: rmzqc
 Title: Creation, Reading and Validation of 'mzqc' Files
-Version: 0.5.2
-Date: 2023-08-05
+Version: 0.5.3
+Date: 2023-08-24
 Authors@R: 
     c(person("Chris", "Bielow", 
               email = "chris.bielow@bsc.fu-berlin.de", 
@@ -27,10 +27,10 @@ Encoding: UTF-8
 Config/testthat/edition: 3
 RoxygenNote: 7.2.3
 NeedsCompilation: no
-Packaged: 2023-08-05 11:58:08 UTC; bielow
+Packaged: 2023-08-25 12:34:25 UTC; bielow
 Author: Chris Bielow [aut, cre] (<https://orcid.org/0000-0001-5756-3988>),
   David Jimenez-Morales [rev, ctb]
     (<https://orcid.org/0000-0003-4356-6461>)
 Maintainer: Chris Bielow <chris.bielow@bsc.fu-berlin.de>
 Repository: CRAN
-Date/Publication: 2023-08-07 16:10:02 UTC
+Date/Publication: 2023-08-25 13:20:02 UTC
