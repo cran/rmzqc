@@ -1,4 +1,4 @@
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 library(rmzqc)
 
 print(getCVInfo())
@@ -6,7 +6,7 @@ print(getCVInfo())
 toQCMetric(id = "MS:4000059", value = 13405) ## number of MS1 scans
 
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 ## With internet:
 myCV = getCVSingleton()
 myCV$setData(getCVDictionary("latest")) ## this is done internally by default when you load the package
@@ -18,7 +18,7 @@ myCV$setData(getCVDictionary("local"))
 cat("Number of entries in local CV: ", nrow(getCVSingleton()$getCV()), "\n")
 print(getCVInfo())
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 myOBO = system.file("./cv/psi-ms.obo", package="rmzqc") ## we will use a local file, but you can point to anything you have (even URI's)
 myCV$setData(getCVDictionary("custom", myOBO))
 cat("Number of entries in custom CV: ", nrow(getCVSingleton()$getCV()), "\n")

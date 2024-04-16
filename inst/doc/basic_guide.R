@@ -1,4 +1,4 @@
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 library(rmzqc)
 data = readMZQC(system.file("./testdata/test.mzQC", package = "rmzqc", mustWork = TRUE))
 cat("This file has ", length(data$runQualities), " runqualities\n")
@@ -8,7 +8,7 @@ cat("    - metric #1 name: ", data$runQualities[[1]]$qualityMetrics[[1]]$name, "
 cat("    - metric #1 value: ", data$runQualities[[1]]$qualityMetrics[[1]]$value, "\n")
 
 
-## ---- eval=TRUE---------------------------------------------------------------
+## ----eval=TRUE----------------------------------------------------------------
 library(rmzqc)
 ## we need a proper URI (i.e. no backslashes and a scheme, e.g. 'file:')
 ## otherwise writing will fail
