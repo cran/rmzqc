@@ -11,7 +11,7 @@
 
 <meta name="author" content="Chris Bielow chris.bielow@fu-berlin.de" />
 
-<meta name="date" content="2024-04-15" />
+<meta name="date" content="2025-03-23" />
 
 <title>Using a custom controlled vocabulary for rMZQC</title>
 
@@ -353,7 +353,7 @@ display: none;
 <h1 class="title toc-ignore">Using a custom controlled vocabulary for
 rMZQC</h1>
 <h4 class="author">Chris Bielow <a href="mailto:chris.bielow@fu-berlin.de" class="email">chris.bielow@fu-berlin.de</a></h4>
-<h4 class="date">2024-04-15</h4>
+<h4 class="date">2025-03-23</h4>
 
 </div>
 
@@ -377,9 +377,9 @@ print(getCVInfo())</code></pre>
 ## Field &quot;name&quot;:
 ## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
 ## Field &quot;uri&quot;:
-## [1] &quot;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.147/psi-ms.obo&quot;
+## [1] &quot;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.192/psi-ms.obo&quot;
 ## Field &quot;version&quot;:
-## [1] &quot;4.1.147&quot;</code></pre>
+## [1] &quot;4.1.192&quot;</code></pre>
 <pre class="r"><code>## test if the default CV is usable
 toQCMetric(id = &quot;MS:4000059&quot;, value = 13405) ## number of MS1 scans</code></pre>
 <pre><code>## Reference class object of class &quot;MzQCqualityMetric&quot;
@@ -399,17 +399,17 @@ rmzqc package (which may not contain the latest CV terms)</p>
 <pre class="r"><code>## With internet:
 myCV = getCVSingleton()
 myCV$setData(getCVDictionary(&quot;latest&quot;)) ## this is done internally by default when you load the package</code></pre>
-<pre><code>## Downloading obo from &#39;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.147/psi-ms.obo&#39; ...</code></pre>
+<pre><code>## Downloading obo from &#39;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.192/psi-ms.obo&#39; ...</code></pre>
 <pre class="r"><code>cat(&quot;Number of entries in latest CV: &quot;, nrow(getCVSingleton()$getCV()), &quot;\n&quot;)</code></pre>
-<pre><code>## Number of entries in latest CV:  6744</code></pre>
+<pre><code>## Number of entries in latest CV:  6806</code></pre>
 <pre class="r"><code>print(getCVInfo())</code></pre>
 <pre><code>## Reference class object of class &quot;MzQCcontrolledVocabulary&quot;
 ## Field &quot;name&quot;:
 ## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
 ## Field &quot;uri&quot;:
-## [1] &quot;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.147/psi-ms.obo&quot;
+## [1] &quot;https://github.com/HUPO-PSI/psi-ms-CV/releases/download/v4.1.192/psi-ms.obo&quot;
 ## Field &quot;version&quot;:
-## [1] &quot;4.1.147&quot;</code></pre>
+## [1] &quot;4.1.192&quot;</code></pre>
 <pre class="r"><code>## simulate missing internet connection by invoking the function manually
 myCV$setData(getCVDictionary(&quot;local&quot;))
 cat(&quot;Number of entries in local CV: &quot;, nrow(getCVSingleton()$getCV()), &quot;\n&quot;)</code></pre>
@@ -435,7 +435,7 @@ cat(&quot;Number of entries in custom CV: &quot;, nrow(getCVSingleton()$getCV())
 ## Field &quot;name&quot;:
 ## [1] &quot;Proteomics Standards Initiative Mass Spectrometry Ontology&quot;
 ## Field &quot;uri&quot;:
-## [1] &quot;C:/Users/bielow/AppData/Local/Temp/Rtmp2fWCUu/Rinst352c48655dee/rmzqc/./cv/psi-ms.obo&quot;
+## [1] &quot;C:/Users/bielow/AppData/Local/Temp/RtmpAZD8Us/Rinst35e8e946395/rmzqc/./cv/psi-ms.obo&quot;
 ## Field &quot;version&quot;:
 ## [1] &quot;4.1.129&quot;</code></pre>
 <pre class="r"><code>## you may want to change the CV-entries, or URI or version manually, before creating an mzQC file:
